@@ -17,6 +17,7 @@
     "@types/axios": "^0.9.36",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.11.0",
+    "cors": "^2.8.5",
     "json-server": "^1.0.0-beta.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
