@@ -4,6 +4,16 @@
       "id": "5166",
       "username": "pop",
       "password": "123456"
+    },
+    {
+      "id": "9c4c",
+      "username": "pule",
+      "password": "123456"
+    },
+    {
+      "id": "ba7d",
+      "username": "sav",
+      "password": "789456"
     }
   ],
   "jobs": [
@@ -19,6 +29,20 @@
         "contact": "071545",
         "duties": "develop",
         "requirements": "deploma"
+      }
+    },
+    {
+      "id": "6da9",
+      "userId": "9c4c",
+      "company": "Mlab",
+      "role": "Software Developer",
+      "status": "Applied",
+      "dateApplied": "2025-08-10",
+      "details": {
+        "address": "1032 kaal",
+        "contact": "6515",
+        "duties": "wfwerf",
+        "requirements": "matric"
       }
     }
   ]
