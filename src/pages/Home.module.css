@@ -1,0 +1,164 @@
+/* src/pages/Home.module.css */
+.home {
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 24px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.input, .select {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus, .select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.addButton {
+  padding: 12px 24px;
+  background-color: #2563eb;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: #1e40af;
+  transform: scale(1.02);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.card {
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.applied {
+  background-color: #fef08a;
+}
+
+.interviewed {
+  background-color: #86efac;
+}
+
+.rejected {
+  background-color: #f87171;
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.cardText {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+
+.cardActions {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.cardLink, .cardButton {
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.cardLink {
+  color: #2563eb;
+}
+
+.cardLink:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+.cardButton {
+  background: none;
+  border: none;
+  color: #f87171;
+}
+
+.cardButton:hover {
+  color: #dc2626;
+  text-decoration: underline;
+}
+
+.noJobs {
+  text-align: center;
+  font-size: 16px;
+  color: #4b5563;
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .filters {
+    flex-direction: row;
+    align-items: center;
+  }
+  .input {
+    width: 33%;
+  }
+  .select {
+    width: 25%;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 28px;
+  }
+}
