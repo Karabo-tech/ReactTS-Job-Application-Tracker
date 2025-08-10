@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "id": "5166",
+      "username": "pop",
+      "password": "123456"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "07a7",
+      "userId": "5166",
+      "company": "mLab",
+      "role": "Software Developer",
+      "status": "Applied",
+      "dateApplied": "2025-08-10",
+      "details": {
+        "address": "1032 kaal",
+        "contact": "071545",
+        "duties": "develop",
+        "requirements": "deploma"
+      }
+    }
+  ]
+}
