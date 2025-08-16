@@ -15,6 +15,7 @@
   font-weight: 700;
   color: #2563eb;
   margin-bottom: 24px;
+  text-align: center;
 }
 
 .form {
@@ -45,11 +46,6 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.input:disabled, .select:disabled, .textarea:disabled {
-  background-color: #f3f4f6;
-  cursor: not-allowed;
-}
-
 .input:focus, .select:focus, .textarea:focus {
   outline: none;
   border-color: #2563eb;
@@ -61,13 +57,18 @@
   resize: vertical;
 }
 
-.submit, .editButton {
-  width: 100%;
-  padding: 12px;
+.actions {
+  display: flex;
+  gap: 16px;
+}
+
+.submit, .editButton, .cancelButton {
+  padding: 12px 24px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
   border: none;
-  border-radius: 8px;
+  cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
@@ -82,12 +83,22 @@
 }
 
 .editButton {
-  background-color: #eab308;
+  background-color: #16a34a;
   color: #fff;
 }
 
 .editButton:hover {
-  background-color: #ca8a04;
+  background-color: #15803d;
+  transform: scale(1.02);
+}
+
+.cancelButton {
+  background-color: #f87171;
+  color: #fff;
+}
+
+.cancelButton:hover {
+  background-color: #dc2626;
   transform: scale(1.02);
 }
 
@@ -97,5 +108,8 @@
   }
   .form {
     padding: 16px;
+  }
+  .submit, .editButton, .cancelButton {
+    font-size: 14px;
   }
 }
