@@ -1,59 +1,90 @@
 // src/pages/Login.tsx
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext';
+import Toast from '../components/Toast';
+import styles from './Login.module.css';
+
+interface LoginData {
+  username: string;
+  password: string;
+}
+
+interface User {
+  id: number;
+  username: string;
+  // add other fields returned by your backend, e.g., token
+}
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [formData, setFormData] = useState<LoginData>({ username: '', password: '' });
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.get<{ [key: string]: any }[]>(`http://localhost:3001/users?username=${username}&password=${password}`);
-      if (res.data.length > 0) {
-        const user = {
-          id: res.data[0].id,
-          username: res.data[0].username,
-          // add other required User properties here if needed
-        };
-        auth?.login(user);
-        navigate('/home');
-      } else {
-        setError('Invalid credentials');
-      }
-    } catch (err) {
-      setError('Error logging in');
+      // Type the response explicitly
+      const res = await axios.post<User>('http://localhost:3001/users', formData);
+      auth?.login(res.data); // Now TS knows res.data is a User
+      setToast({ message: 'Logged in successfully', type: 'success' });
+      setTimeout(() => navigate('/home'), 1000);
+    } catch (err: any) {
+      const errorMessage = err.response?.data || err.message || 'Unknown error';
+      setToast({ message: `Failed to log in: ${errorMessage}`, type: 'error' });
+      console.error('Login error:', errorMessage);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl mb-4">Login</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          className="w-full mb-4 p-2 border rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full mb-4 p-2 border rounded"
-        />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Login</button>
-      </form>
+    <div className={styles.loginPage}>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Log In</h1>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.field}>
+            <label htmlFor="username" className={styles.label}>Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Enter username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="password" className={styles.label}>Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Enter password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+          </div>
+          <div className={styles.actions}>
+            <button type="submit" className={styles.submit}>
+              Log In
+            </button>
+          </div>
+          <p className={styles.linkText}>
+            Don't have an account? <Link to="/register" className={styles.link}>Register</Link>
+          </p>
+        </form>
+      </div>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 };
