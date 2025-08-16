@@ -1,11 +1,25 @@
 /* src/pages/Register.module.css */
-.register {
+.registerPage {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
+  padding: 24px 16px;
   background: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 24px;
+  text-align: center;
 }
 
 .form {
@@ -13,23 +27,6 @@
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-}
-
-.title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #2563eb;
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.error {
-  color: #f87171;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 16px;
 }
 
 .field {
@@ -59,28 +56,72 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .submit {
-  width: 100%;
-  padding: 12px;
-  background-color: #16a34a;
+  padding: 12px 24px;
+  background-color: #2563eb;
   color: #fff;
   font-size: 16px;
   font-weight: 500;
   border: none;
   border-radius: 8px;
+  cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .submit:hover {
-  background-color: #15803d;
+  background-color: #1e40af;
   transform: scale(1.02);
 }
 
+.cancelButton {
+  padding: 12px 24px;
+  background-color: #f87171;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cancelButton:hover {
+  background-color: #dc2626;
+  transform: scale(1.02);
+}
+
+.linkText {
+  text-align: center;
+  font-size: 14px;
+  color: #4b5563;
+  margin-top: 16px;
+}
+
+.link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 480px) {
+  .title {
+    font-size: 28px;
+  }
   .form {
     padding: 16px;
   }
-  .title {
-    font-size: 24px;
+  .submit, .cancelButton {
+    font-size: 14px;
   }
 }
