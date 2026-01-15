@@ -1,86 +1,118 @@
 /* src/pages/Landing.module.css */
 .landing {
-  min-height: 100vh;
+  min-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  padding: 16px;
+  background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-gray-100) 100%);
+  padding: var(--spacing-6);
 }
 
-.container {
+.content {
   text-align: center;
-  max-width: 800px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .title {
-  font-size: 48px;
-  font-weight: 700;
-  color: #2563eb;
-  margin-bottom: 24px;
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-primary-600);
+  margin-bottom: var(--spacing-6);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
 }
 
 .description {
-  font-size: 18px;
-  color: #4b5563;
-  margin-bottom: 32px;
-  line-height: 1.6;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-8);
+  line-height: var(--line-height-relaxed);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .buttons {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-4);
+  align-items: center;
 }
 
-.button {
-  display: inline-block;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  cursor: pointer;
+.buttons a {
+  width: 100%;
+  max-width: 200px;
 }
 
-.button:first-child {
-  background-color: #2563eb;
-  color: #fff;
+.buttons button {
+  width: 100%;
 }
 
-.button:first-child:hover {
-  background-color: #1e40af;
-  transform: scale(1.05);
+/* Responsive Design */
+@media (max-width: 640px) {
+  .landing {
+    padding: var(--spacing-4);
+  }
+  
+  .title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .description {
+    font-size: var(--font-size-base);
+  }
 }
 
-.button:last-child {
-  background-color: #16a34a;
-  color: #fff;
+@media (min-width: 641px) and (max-width: 768px) {
+  .title {
+    font-size: var(--font-size-4xl);
+  }
+  
+  .description {
+    font-size: var(--font-size-lg);
+  }
+  
+  .buttons {
+    flex-direction: row;
+  }
+  
+  .buttons a {
+    width: auto;
+  }
 }
 
-.button:last-child:hover {
-  background-color: #15803d;
-  transform: scale(1.05);
-}
-
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .buttons {
     flex-direction: row;
     justify-content: center;
   }
-  .title {
-    font-size: 56px;
+  
+  .buttons a {
+    width: auto;
   }
+  
+  .title {
+    font-size: var(--font-size-6xl);
+  }
+  
   .description {
-    font-size: 20px;
+    font-size: var(--font-size-xl);
   }
 }
 
-@media (max-width: 480px) {
-  .title {
-    font-size: 32px;
+@media (min-width: 1024px) {
+  .landing {
+    padding: var(--spacing-12);
   }
+}
+
+@media (min-width: 1536px) {
+  .title {
+    font-size: 4.5rem;
+  }
+  
   .description {
-    font-size: 16px;
+    font-size: var(--font-size-2xl);
   }
 }

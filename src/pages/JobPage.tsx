@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext';
-import Toast from '../components/Toast';
+import { Toast, Button, Input, Select, Textarea, Container, Card } from '../components';
 import styles from './JobPage.module.css';
 
 interface Job {
@@ -126,12 +126,12 @@ const JobPage = () => {
 
   return (
     <div className={styles.jobPage}>
-      <div className={styles.container}>
+      <Container size="md">
         <h1 className={styles.title}>{isNew ? 'Add New Job' : editMode ? 'Edit Job' : 'Job Details'}</h1>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <label htmlFor="company" className={styles.label}>Company Name</label>
-            <input
+        <Card>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <Input
+              label="Company Name"
               name="company"
               id="company"
               placeholder="Enter company name"
@@ -139,13 +139,11 @@ const JobPage = () => {
               onChange={handleChange}
               required
               disabled={!editMode}
-              className={styles.input}
+              fullWidth
             />
-          </div>
 
-          <div className={styles.field}>
-            <label htmlFor="role" className={styles.label}>Role</label>
-            <input
+            <Input
+              label="Role"
               name="role"
               id="role"
               placeholder="Enter role"
@@ -153,29 +151,25 @@ const JobPage = () => {
               onChange={handleChange}
               required
               disabled={!editMode}
-              className={styles.input}
+              fullWidth
             />
-          </div>
 
-          <div className={styles.field}>
-            <label htmlFor="status" className={styles.label}>Status</label>
-            <select
+            <Select
+              label="Status"
               name="status"
               id="status"
               value={job.status}
               onChange={handleChange}
               disabled={!editMode}
-              className={styles.select}
+              fullWidth
             >
               <option>Applied</option>
               <option>Interviewed</option>
               <option>Rejected</option>
-            </select>
-          </div>
+            </Select>
 
-          <div className={styles.field}>
-            <label htmlFor="dateApplied" className={styles.label}>Date Applied</label>
-            <input
+            <Input
+              label="Date Applied"
               type="date"
               name="dateApplied"
               id="dateApplied"
@@ -183,90 +177,99 @@ const JobPage = () => {
               onChange={handleChange}
               required
               disabled={!editMode}
-              className={styles.input}
+              fullWidth
             />
-          </div>
 
-          <div className={styles.field}>
-            <label htmlFor="address" className={styles.label}>Company Address</label>
-            <input
+            <Input
+              label="Company Address"
               name="details.address"
               id="address"
               placeholder="Enter company address"
               value={job.details.address}
               onChange={handleChange}
               disabled={!editMode}
-              className={styles.input}
+              fullWidth
             />
-          </div>
 
-          <div className={styles.field}>
-            <label htmlFor="contact" className={styles.label}>Contact Details</label>
-            <input
+            <Input
+              label="Contact Details"
               name="details.contact"
               id="contact"
-              placeholder="Enter contact details"
+              placeholder="Enter contact details (email or phone)"
               value={job.details.contact}
               onChange={handleChange}
               disabled={!editMode}
-              className={styles.input}
+              fullWidth
             />
-          </div>
 
-          <div className={styles.field}>
-            <label htmlFor="duties" className={styles.label}>Job Duties</label>
-            <textarea
+            <Textarea
+              label="Job Duties"
               name="details.duties"
               id="duties"
-              placeholder="Enter job duties"
+              placeholder="Describe the job duties and responsibilities"
               value={job.details.duties}
               onChange={handleChange}
               disabled={!editMode}
-              className={styles.textarea}
+              fullWidth
+              rows={4}
             />
-          </div>
 
-          <div className={styles.field}>
-            <label htmlFor="requirements" className={styles.label}>Requirements</label>
-            <textarea
+            <Textarea
+              label="Requirements"
               name="details.requirements"
               id="requirements"
-              placeholder="Enter requirements"
+              placeholder="List the job requirements and qualifications"
               value={job.details.requirements}
               onChange={handleChange}
               disabled={!editMode}
-              className={styles.textarea}
+              fullWidth
+              rows={4}
             />
-          </div>
 
-          <div className={styles.actions}>
-            {editMode ? (
-              <>
-                <button type="submit" className={styles.submit}>
-                  {isNew ? 'Add' : 'Update'}
-                </button>
-                {!isNew && (
-                  <button
+            <div className={styles.actions}>
+              {editMode ? (
+                <>
+                  <Button type="submit" variant="primary" size="md" fullWidth>
+                    {isNew ? 'Add Job' : 'Update Job'}
+                  </Button>
+                  {!isNew && (
+                    <Button
+                      type="button"
+                      onClick={() => setEditMode(false)}
+                      variant="secondary"
+                      size="md"
+                      fullWidth
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Button
                     type="button"
-                    onClick={() => setEditMode(false)}
-                    className={styles.cancelButton}
+                    onClick={() => setEditMode(true)}
+                    variant="success"
+                    size="md"
+                    fullWidth
                   >
-                    Cancel
-                  </button>
-                )}
-              </>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setEditMode(true)}
-                className={styles.editButton}
-              >
-                Edit
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
+                    Edit Job
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => navigate('/home')}
+                    variant="secondary"
+                    size="md"
+                    fullWidth
+                  >
+                    Back to List
+                  </Button>
+                </>
+              )}
+            </div>
+          </form>
+        </Card>
+      </Container>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );

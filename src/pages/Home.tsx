@@ -4,7 +4,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { AuthContext } from '../contexts/AuthContext';
-import Toast from '../components/Toast';
+import { Toast, Button, Input, Select, Card, Container } from '../components';
 import styles from './Home.module.css';
 
 interface Job {
@@ -21,12 +21,6 @@ interface Job {
     requirements?: string;
   };
 }
-
-const statusColors: Record<Job['status'], string> = {
-  Applied: styles.applied,
-  Interviewed: styles.interviewed,
-  Rejected: styles.rejected,
-};
 
 const Home = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -96,64 +90,89 @@ const Home = () => {
     });
   };
 
+  const getCardVariant = (status: Job['status']) => {
+    const variantMap: Record<Job['status'], 'applied' | 'interviewed' | 'rejected'> = {
+      Applied: 'applied',
+      Interviewed: 'interviewed',
+      Rejected: 'rejected',
+    };
+    return variantMap[status];
+  };
+
   return (
     <div className={styles.home}>
-      <div className={styles.container}>
+      <Container>
         <h1 className={styles.title}>Your Job Applications</h1>
         <div className={styles.filters}>
-          <input
+          <Input
             type="text"
             placeholder="Search by company or role"
             value={search}
             onChange={(e) => updateSearchParams('search', e.target.value)}
-            className={styles.input}
+            fullWidth
           />
-          <select
+          <Select
             value={filter}
             onChange={(e) => updateSearchParams('filter', e.target.value)}
-            className={styles.select}
+            fullWidth
           >
             <option value="">All Statuses</option>
             <option value="Applied">Applied</option>
             <option value="Interviewed">Interviewed</option>
             <option value="Rejected">Rejected</option>
-          </select>
-          <select
+          </Select>
+          <Select
             value={sort}
             onChange={(e) => updateSearchParams('sort', e.target.value)}
-            className={styles.select}
+            fullWidth
           >
-            <option value="desc">Sort by Date Desc</option>
-            <option value="asc">Sort by Date Asc</option>
-          </select>
-          <Link to="/job/new" className={styles.addButton}>
-            Add New Job
+            <option value="desc">Sort by Date (Newest)</option>
+            <option value="asc">Sort by Date (Oldest)</option>
+          </Select>
+          <Link to="/job/new">
+            <Button variant="primary" size="md" fullWidth>
+              + Add New Job
+            </Button>
           </Link>
         </div>
         <div className={styles.grid}>
           {filteredJobs.map(job => (
-            <div key={job.id} className={`${styles.card} ${statusColors[job.status]}`}>
-              <h2 className={styles.cardTitle}>{job.company} - {job.role}</h2>
-              <p className={styles.cardText}>Status: {job.status}</p>
-              <p className={styles.cardText}>Date Applied: {job.dateApplied}</p>
-              <div className={styles.cardActions}>
-                <Link to={`/job/${job.id}?edit=true`} className={styles.cardLink}>
-                  Edit
-                </Link>
-                <Link to={`/job/${job.id}`} className={styles.cardLink}>
-                  Details
-                </Link>
-                <button onClick={() => handleDelete(job.id)} className={styles.cardButton}>
-                  Delete
-                </button>
+            <Card key={job.id} variant={getCardVariant(job.status)} hoverable>
+              <h2 className={styles.cardTitle}>{job.company}</h2>
+              <h3 className={styles.cardSubtitle}>{job.role}</h3>
+              <div className={styles.cardInfo}>
+                <span className={styles.cardStatus}>{job.status}</span>
+                <span className={styles.cardDate}>{new Date(job.dateApplied).toLocaleDateString()}</span>
               </div>
-            </div>
+              <div className={styles.cardActions}>
+                <Link to={`/job/${job.id}`}>
+                  <Button variant="ghost" size="sm">
+                    View
+                  </Button>
+                </Link>
+                <Link to={`/job/${job.id}?edit=true`}>
+                  <Button variant="secondary" size="sm">
+                    Edit
+                  </Button>
+                </Link>
+                <Button onClick={() => handleDelete(job.id)} variant="danger" size="sm">
+                  Delete
+                </Button>
+              </div>
+            </Card>
           ))}
         </div>
         {filteredJobs.length === 0 && (
-          <p className={styles.noJobs}>No jobs found.</p>
+          <div className={styles.noJobs}>
+            <p>No jobs found.</p>
+            <Link to="/job/new">
+              <Button variant="primary" size="lg">
+                Add Your First Job
+              </Button>
+            </Link>
+          </div>
         )}
-      </div>
+      </Container>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
