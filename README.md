@@ -1,69 +1,104 @@
-# React + TypeScript + Vite
+# Job Application Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple React + TypeScript application for tracking job applications (company, role, status, date applied, and additional details). The project uses a Vite frontend and a lightweight JSON Server backend (`db.json`).
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- User authentication (stored locally)
+- View all job applications for the logged-in user
+- Search by company or role
+- Filter by status (Applied / Interviewed / Rejected)
+- Sort by application date
+- Create new job entries
+- Edit existing jobs
+- View job details
+- Delete jobs
+- Toast notifications for key actions
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend:** React, TypeScript, React Router
+- **Build tooling:** Vite
+- **HTTP:** Axios
+- **Backend (dev):** JSON Server (`db.json`)
+- **Styling:** CSS Modules + shared theme tokens (CSS variables)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Node.js 18+ (recommended)
+- npm 9+
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+1) Install dependencies:
+
+```bash
+npm i
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2) Start the app (frontend + backend together):
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+This runs:
+- JSON Server on `http://localhost:3001`
+- Vite dev server (usually) on `http://localhost:5173`
+
+## Useful Scripts
+
+- `npm run dev` – starts JSON Server + Vite in parallel
+- `npm run server` – starts JSON Server only (`db.json` on port `3001`)
+- `npm run vite` – starts Vite only
+- `npm run build` – production build
+- `npm run preview` – preview the production build
+- `npm run lint` – run ESLint
+
+> Note: `npm test` is currently wired to `react-scripts` (Create React App) but this project is Vite-based. Prefer `npm run lint` and `npm run build` for validation.
+
+## Application Routes
+
+- `/` – Landing page
+- `/login` – Login
+- `/register` – Register
+- `/home` – Job list (protected)
+- `/job/new` – Create a job (protected)
+- `/job/:id` – Job details (protected)
+- `/job/:id?edit=true` – Edit an existing job (protected)
+
+## Backend (JSON Server)
+
+The backend is provided by JSON Server and reads/writes from `db.json`.
+
+### Endpoints
+
+- `GET /jobs?userId=<id>` – list jobs for a specific user
+- `GET /jobs/<id>` – get a job by id
+- `POST /jobs` – create a job
+- `PUT /jobs/<id>` – update a job
+- `DELETE /jobs/<id>` – delete a job
+
+- `POST /users` – used by the UI for login/register in this demo setup
+
+## Project Structure (high level)
+
+```
+src/
+  components/        # Navbar, Toast, ProtectedRoute
+  contexts/          # Auth context/provider
+  pages/             # Landing, Login, Register, Home, JobPage, NotFound
+  index.css          # Global styles + theme tokens
+  main.tsx           # App bootstrap
+  App.tsx            # Routes
+public/
+  ...
+db.json              # JSON Server database
+```
+
+## Notes / Troubleshooting
+
+- If you see errors like “Unknown word” coming from a `.module.css` file, it usually indicates invalid CSS content (for example literal `\\n` sequences). Ensure the file contains real newlines.
+- If JSON Server is already using port 3001, stop the other process or change the port in `package.json` and the Axios URLs.
+
+
