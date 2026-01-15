@@ -1,127 +1,84 @@
 /* src/pages/Register.module.css */
 .registerPage {
-  min-height: 100vh;
-  padding: 24px 16px;
-  background: #f3f4f6;
+  min-height: calc(100vh - 72px);
+  padding: var(--spacing-6);
+  background: var(--color-background);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.container {
-  max-width: 800px;
+.content {
   width: 100%;
+  max-width: 500px;
   margin: 0 auto;
 }
 
 .title {
-  font-size: 36px;
-  font-weight: 700;
-  color: #2563eb;
-  margin-bottom: 24px;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-600);
+  margin-bottom: var(--spacing-6);
   text-align: center;
 }
 
 .form {
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.field {
-  margin-bottom: 16px;
-}
-
-.label {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  color: #4b5563;
-  margin-bottom: 8px;
-}
-
-.input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.input:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
 }
 
 .actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.submit {
-  padding: 12px 24px;
-  background-color: #2563eb;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.submit:hover {
-  background-color: #1e40af;
-  transform: scale(1.02);
-}
-
-.cancelButton {
-  padding: 12px 24px;
-  background-color: #f87171;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.cancelButton:hover {
-  background-color: #dc2626;
-  transform: scale(1.02);
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-2);
 }
 
 .linkText {
   text-align: center;
-  font-size: 14px;
-  color: #4b5563;
-  margin-top: 16px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-2);
 }
 
 .link {
-  color: #2563eb;
+  color: var(--color-primary-600);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
 }
 
 .link:hover {
+  color: var(--color-primary-700);
   text-decoration: underline;
 }
 
-@media (max-width: 480px) {
+/* Responsive Design */
+@media (max-width: 640px) {
+  .registerPage {
+    padding: var(--spacing-4);
+  }
+  
   .title {
-    font-size: 28px;
+    font-size: var(--font-size-2xl);
   }
-  .form {
-    padding: 16px;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--font-size-4xl);
   }
-  .submit, .cancelButton {
-    font-size: 14px;
+}
+
+@media (min-width: 1024px) {
+  .registerPage {
+    padding: var(--spacing-12);
+  }
+}
+
+@media (min-width: 1536px) {
+  .content {
+    max-width: 600px;
   }
 }

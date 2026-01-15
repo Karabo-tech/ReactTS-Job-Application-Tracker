@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext';
-import Toast from '../components/Toast';
+import { Toast, Button, Input, Container, Card } from '../components';
 import styles from './Register.module.css';
 
 interface RegisterData {
@@ -14,7 +14,6 @@ interface RegisterData {
 interface User {
   id: number;
   username: string;
-  // add other fields returned by your backend, e.g., token
 }
 
 const Register = () => {
@@ -31,9 +30,8 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Type the response as User
       const res = await axios.post<User>('http://localhost:3001/users', formData);
-      auth?.login(res.data); // Now TS knows res.data is a User
+      auth?.login(res.data);
       setToast({ message: 'Registered successfully', type: 'success' });
       setTimeout(() => navigate('/home'), 1000);
     } catch (err: any) {
@@ -45,52 +43,54 @@ const Register = () => {
 
   return (
     <div className={styles.registerPage}>
-      <div className={styles.container}>
-        <h1 className={styles.title}>Register</h1>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <label htmlFor="username" className={styles.label}>Username</label>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Enter username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.field}>
-            <label htmlFor="password" className={styles.label}>Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.actions}>
-            <button type="submit" className={styles.submit}>
-              Register
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/login')}
-              className={styles.cancelButton}
-            >
-              Cancel
-            </button>
-          </div>
-          <p className={styles.linkText}>
-            Already have an account? <Link to="/login" className={styles.link}>Log In</Link>
-          </p>
-        </form>
-      </div>
+      <Container size="md">
+        <div className={styles.content}>
+          <h1 className={styles.title}>Register</h1>
+          <Card>
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <Input
+                label="Username"
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Enter username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+              <Input
+                label="Password"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+              <div className={styles.actions}>
+                <Button type="submit" variant="primary" size="md" fullWidth>
+                  Register
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => navigate('/login')}
+                  variant="secondary"
+                  size="md"
+                  fullWidth
+                >
+                  Cancel
+                </Button>
+              </div>
+              <p className={styles.linkText}>
+                Already have an account? <Link to="/login" className={styles.link}>Log In</Link>
+              </p>
+            </form>
+          </Card>
+        </div>
+      </Container>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
