@@ -1,128 +1,153 @@
 // src/pages/JobPage.tsx
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext';
 import { Toast, Button, Input, Select, Textarea, Container, Card } from '../components';
+import { jobApi } from '../services/api';
+import { useToast } from '../hooks/useToast';
+import { convertToDateTimeLocal, formatDateTimeLocal } from '../utils/helpers';
+import { ROUTES, TOAST_MESSAGES, JOB_STATUS } from '../config/constants';
+import type { Job, ApiError } from '../types';
 import styles from './JobPage.module.css';
 
-interface Job {
-  id?: number;
-  userId: number;
-  company: string;
-  role: string;
-  status: 'Applied' | 'Interviewed' | 'Rejected';
-  dateApplied: string;
-  details: {
-    address: string;
-    contact: string;
-    duties: string;
-    requirements: string;
-  };
-}
-
-const initialJob: Job = {
-  userId: 0,
+/**
+ * Initial empty job state
+ */
+const getInitialJob = (userId: number | string): Job => ({
+  userId,
   company: '',
   role: '',
-  status: 'Applied',
-  dateApplied: new Date().toISOString().split('T')[0],
+  status: JOB_STATUS.APPLIED,
+  dateApplied: formatDateTimeLocal(new Date()),
   details: { address: '', contact: '', duties: '', requirements: '' },
-};
+});
 
+/**
+ * JobPage Component
+ * Displays job details and allows creating/editing jobs
+ */
 const JobPage = () => {
   const { id } = useParams<{ id: string }>();
-  const isNew = id === 'new';
   const location = useLocation();
-  const editModeFromQuery = new URLSearchParams(location.search).get('edit') === 'true';
-  const [job, setJob] = useState<Job>(initialJob);
-  const [editMode, setEditMode] = useState(isNew || editModeFromQuery);
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const auth = useContext(AuthContext);
+  
+  const isNew = id === 'new';
+  const editModeFromQuery = new URLSearchParams(location.search).get('edit') === 'true';
   const userId = auth?.user?.id;
 
+  // State
+  const [job, setJob] = useState<Job>(getInitialJob(userId || 0));
+  const [editMode, setEditMode] = useState(isNew || editModeFromQuery);
+  const [loading, setLoading] = useState(false);
+  
+  // Custom hooks
+  const { toast, showSuccess, showError, hideToast } = useToast();
+
+  /**
+   * Fetch job details when editing an existing job
+   */
   useEffect(() => {
     if (!userId) {
-      setToast({ message: 'Please log in to add or edit jobs', type: 'error' });
-      navigate('/login');
+      showError(TOAST_MESSAGES.LOGIN_REQUIRED);
+      navigate(ROUTES.LOGIN);
       return;
     }
 
     if (!isNew && id) {
       const fetchJob = async () => {
+        setLoading(true);
         try {
-          // Type the axios response
-          const res = await axios.get<Job>(`http://localhost:3001/jobs/${id}`);
+          const data = await jobApi.getJobById(id);
           
-          if (res.data.userId !== userId) {
-            setToast({ message: 'Unauthorized access', type: 'error' });
-            navigate('/home');
+          // Check if user owns this job
+          if (data.userId !== userId) {
+            showError(TOAST_MESSAGES.UNAUTHORIZED);
+            navigate(ROUTES.HOME);
             return;
           }
 
+          // Convert date-only format to datetime-local for backward compatibility
+          const dateApplied = convertToDateTimeLocal(data.dateApplied);
+
           setJob({
-            ...res.data,
+            ...data,
+            dateApplied,
             details: {
-              address: res.data.details.address || '',
-              contact: res.data.details.contact || '',
-              duties: res.data.details.duties || '',
-              requirements: res.data.details.requirements || '',
+              address: data.details?.address || '',
+              contact: data.details?.contact || '',
+              duties: data.details?.duties || '',
+              requirements: data.details?.requirements || '',
             },
           });
-        } catch (err: any) {
-          setToast({ message: 'Failed to fetch job', type: 'error' });
-          console.error('Fetch error:', err.response?.data || err.message || err);
+        } catch (err) {
+          const apiError = err as ApiError;
+          showError(apiError.message || TOAST_MESSAGES.JOB_FETCH_FAILED);
+        } finally {
+          setLoading(false);
         }
       };
       fetchJob();
     } else {
-      setJob({ ...initialJob, userId: userId || 0 });
+      setJob(getInitialJob(userId));
     }
-  }, [id, isNew, userId, navigate]);
+  }, [id, isNew, userId, navigate, showError]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  /**
+   * Handle form input changes
+   */
+  const handleChange = useCallback((
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
+    
     if (name.includes('details.')) {
       const detailKey = name.split('.')[1] as keyof Job['details'];
-      setJob(prev => ({
+      setJob((prev) => ({
         ...prev,
         details: { ...prev.details, [detailKey]: value },
       }));
     } else {
-      setJob(prev => ({ ...prev, [name]: value }));
+      setJob((prev) => ({ ...prev, [name]: value }));
     }
-  };
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  /**
+   * Handle form submission for creating or updating a job
+   */
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!userId) {
-      setToast({ message: 'User not authenticated', type: 'error' });
-      navigate('/login');
+      showError(TOAST_MESSAGES.USER_NOT_AUTHENTICATED);
+      navigate(ROUTES.LOGIN);
       return;
     }
 
+    setLoading(true);
+
     try {
-      const payload = { ...job, userId }; // Ensure userId is included
+      const payload = { ...job, userId };
 
       if (isNew) {
-        const res = await axios.post<Job>(`http://localhost:3001/jobs`, payload);
-        setToast({ message: 'Job added successfully', type: 'success' });
-        setJob(res.data);
+        const data = await jobApi.createJob(payload);
+        showSuccess(TOAST_MESSAGES.JOB_ADDED_SUCCESS);
+        setJob(data);
       } else {
-        const res = await axios.put<Job>(`http://localhost:3001/jobs/${id}`, payload);
-        setToast({ message: 'Job updated successfully', type: 'success' });
-        setJob(res.data);
+        const data = await jobApi.updateJob(id!, payload);
+        showSuccess(TOAST_MESSAGES.JOB_UPDATED_SUCCESS);
+        setJob(data);
       }
 
       setEditMode(false);
-      setTimeout(() => navigate('/home'), 1000);
-    } catch (err: any) {
-      const errorMessage = err.response?.data || err.message || 'Unknown error';
-      setToast({ message: `Failed to save job: ${errorMessage}`, type: 'error' });
-      console.error('Save error:', err.response?.status, errorMessage);
+      setTimeout(() => navigate(ROUTES.HOME), 1000);
+    } catch (err) {
+      const apiError = err as ApiError;
+      showError(`${TOAST_MESSAGES.JOB_SAVE_FAILED}: ${apiError.message}`);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [userId, job, isNew, id, navigate, showSuccess, showError]);
 
   return (
     <div className={styles.jobPage}>
@@ -163,14 +188,14 @@ const JobPage = () => {
               disabled={!editMode}
               fullWidth
             >
-              <option>Applied</option>
-              <option>Interviewed</option>
-              <option>Rejected</option>
+              <option value={JOB_STATUS.APPLIED}>{JOB_STATUS.APPLIED}</option>
+              <option value={JOB_STATUS.INTERVIEWED}>{JOB_STATUS.INTERVIEWED}</option>
+              <option value={JOB_STATUS.REJECTED}>{JOB_STATUS.REJECTED}</option>
             </Select>
 
             <Input
               label="Date Applied"
-              type="date"
+              type="datetime-local"
               name="dateApplied"
               id="dateApplied"
               value={job.dateApplied}
@@ -257,7 +282,7 @@ const JobPage = () => {
                   </Button>
                   <Button
                     type="button"
-                    onClick={() => navigate('/home')}
+                    onClick={() => navigate(ROUTES.HOME)}
                     variant="secondary"
                     size="md"
                     fullWidth
@@ -270,7 +295,7 @@ const JobPage = () => {
           </form>
         </Card>
       </Container>
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
     </div>
   );
 };

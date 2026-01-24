@@ -24,6 +24,26 @@
       "id": "0f29",
       "username": "230545545@tut4life.ac.za",
       "password": "123456"
+    },
+    {
+      "id": "b349",
+      "username": "230545545@tut4life.ac.za",
+      "password": "123456"
+    },
+    {
+      "id": "2c9d",
+      "username": "230545545@tut4life.ac.za",
+      "password": "022"
+    },
+    {
+      "id": "1ec2",
+      "username": "karaboshabe226@gmail.com",
+      "password": "125"
+    },
+    {
+      "id": "0238",
+      "username": "230545545@tut4life.ac.za",
+      "password": "d"
     }
   ],
   "jobs": [
@@ -81,6 +101,118 @@
         "contact": "0711507002",
         "duties": "Certifying documents",
         "requirements": "Grade 12"
+      }
+    },
+    {
+      "id": "e626",
+      "userId": "b349",
+      "company": "mLab",
+      "role": "Software Developer",
+      "status": "Applied",
+      "dateApplied": "2026-01-24",
+      "details": {
+        "address": "dee@cr",
+        "contact": "25252edferferf",
+        "duties": "rfrfrfrfrf",
+        "requirements": "rfrf"
+      }
+    },
+    {
+      "id": "d553",
+      "userId": "b349",
+      "company": "CY",
+      "role": "wde3",
+      "status": "Applied",
+      "dateApplied": "2026-01-24",
+      "details": {
+        "address": "",
+        "contact": "",
+        "duties": "",
+        "requirements": ""
+      }
+    },
+    {
+      "id": "b622",
+      "userId": "2c9d",
+      "company": "mLab",
+      "role": "Software Developer",
+      "status": "Applied",
+      "dateApplied": "2026-01-24",
+      "details": {
+        "address": "",
+        "contact": "",
+        "duties": "",
+        "requirements": ""
+      }
+    },
+    {
+      "id": "72f3",
+      "userId": "2c9d",
+      "company": "amazon",
+      "role": "ityuiy",
+      "status": "Applied",
+      "dateApplied": "2026-01-24",
+      "details": {
+        "address": "",
+        "contact": "",
+        "duties": "",
+        "requirements": ""
+      }
+    },
+    {
+      "id": "494b",
+      "userId": "1ec2",
+      "company": "mLab",
+      "role": "Software Developer",
+      "status": "Applied",
+      "dateApplied": "2026-01-24T21:20",
+      "details": {
+        "address": "",
+        "contact": "",
+        "duties": "",
+        "requirements": ""
+      }
+    },
+    {
+      "id": "bb34",
+      "userId": "1ec2",
+      "company": "amazon",
+      "role": "IT",
+      "status": "Applied",
+      "dateApplied": "2026-01-30T21:20",
+      "details": {
+        "address": "",
+        "contact": "",
+        "duties": "",
+        "requirements": ""
+      }
+    },
+    {
+      "id": "65b8",
+      "userId": "0238",
+      "company": "mLab",
+      "role": "Software Developer",
+      "status": "Applied",
+      "dateApplied": "2026-01-24T21:26",
+      "details": {
+        "address": "",
+        "contact": "",
+        "duties": "",
+        "requirements": ""
+      }
+    },
+    {
+      "id": "92a2",
+      "userId": "0238",
+      "company": "amazon",
+      "role": "IT",
+      "status": "Applied",
+      "dateApplied": "2026-01-23T21:30",
+      "details": {
+        "address": "",
+        "contact": "",
+        "duties": "",
+        "requirements": ""
       }
     }
   ]

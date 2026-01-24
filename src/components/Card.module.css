@@ -3,8 +3,22 @@
   background-color: var(--color-surface);
   border-radius: var(--radius-lg);
   padding: var(--spacing-6);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-base);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .hoverable {
@@ -12,8 +26,12 @@
 }
 
 .hoverable:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.hoverable:hover::before {
+  opacity: 1;
 }
 
 /* Variants for job status */
@@ -22,18 +40,30 @@
 }
 
 .applied {
-  background-color: var(--color-warning-100);
-  border-left: 4px solid var(--color-warning-500);
+  background: linear-gradient(135deg, rgba(240, 147, 251, 0.05) 0%, rgba(245, 87, 108, 0.05) 100%);
+  border-left: 4px solid #f5576c;
+}
+
+.applied::before {
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
 }
 
 .interviewed {
-  background-color: var(--color-success-100);
-  border-left: 4px solid var(--color-success-500);
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.05) 0%, rgba(0, 242, 254, 0.05) 100%);
+  border-left: 4px solid #00f2fe;
+}
+
+.interviewed::before {
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
 }
 
 .rejected {
-  background-color: var(--color-error-100);
-  border-left: 4px solid var(--color-error-500);
+  background: linear-gradient(135deg, rgba(250, 112, 154, 0.05) 0%, rgba(254, 225, 64, 0.05) 100%);
+  border-left: 4px solid #fa709a;
+}
+
+.rejected::before {
+  background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
 }
 
 /* Responsive adjustments */
