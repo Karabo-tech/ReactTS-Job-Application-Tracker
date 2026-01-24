@@ -8,3 +8,6 @@ export { default as Container } from './Container';
 export { default as Toast } from './Toast';
 export { default as Navbar } from './Navbar';
 export { default as ProtectedRoute } from './ProtectedRoute';
+export { default as ErrorBoundary } from './ErrorBoundary';
+export { default as JobCard } from './JobCard';
+export { default as StatCard } from './StatCard';
